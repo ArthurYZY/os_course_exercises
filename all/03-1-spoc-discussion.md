@@ -74,6 +74,25 @@ NOTICE
 
 按照内存的大小有一系列的链表组织，将相同大小的内存区域首地址链接起来
 
+在linux中主要数据结构如下
+
+```C
+struct zone {
+	...
+         ...	
+	struct free_area	free_area[MAX_ORDER];			// 一个order使用一个free_area
+	...
+	...
+}
+
+struct free_area {
+	struct list_head	free_list[MIGRATE_TYPES];		// 双向链表
+	unsigned long		nr_free;						// 总共空闲块数量
+};
+```
+
+
+
 2.伙伴系统的内存分配流程？伙伴系统的内存回收流程？
 
 * 分配：由小到大在空闲块数组中找到最小的可用空闲块，如果空闲块过大（大小需要内存的二倍），则对空闲块进行二等分，直到满足要求为止
